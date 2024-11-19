@@ -3,7 +3,7 @@ import clsx from "clsx"
 
 const Textbox = React.forwardRef(
     ({type,placeholder,label,className,register,name,error},ref)=>{
-    return 
+    return(
         <div className='w-full flex-col gap-1'>
             {label && 
             <label htmlFor={name}
@@ -21,6 +21,7 @@ const Textbox = React.forwardRef(
                 <span className='text-xs text-[#f64949fe] mt-0.5'>{error}</span>
             )}
         </div>
+    )
     
 })
 

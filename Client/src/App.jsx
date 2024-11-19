@@ -1,4 +1,4 @@
-import Login from './pages/Login.jsx';
+import Login from './pages/login.jsx';
 import { Routes,Route,Navigate,Outlet,useLocation } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard.jsx";
 import Tasks from "./pages/Task.jsx"; 

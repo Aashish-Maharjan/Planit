@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
-import { useSelector } from "react-redux";
+
 
 const Login = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state)=>state.auth);
   const {
     register,
     handleSubmit,
@@ -35,7 +35,7 @@ const Login = () => {
               Manage all your task in one place!
             </span>
             <p className='flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center text-blue-700'>
-              <span>Cloud-Based</span>
+              <span>Planit</span>
               <span>Task Manager</span>
             </p>
 
