@@ -8,7 +8,7 @@ const Button = ({icon,className,label,type,onClick=()=>{}}) => {
     className)}>
         <span>{label}</span>
       {icon && icon}
-    </button>
+    </button> 
   )
 }
 
