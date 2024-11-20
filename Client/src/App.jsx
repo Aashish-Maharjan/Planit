@@ -1,7 +1,7 @@
 import Login from './pages/Login';
 import { Routes,Route,Navigate,Outlet,useLocation } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard";
-import Tasks from "./pages/Task"; 
+import Tasks from "./pages/Tasks"; 
 import Users from "./pages/Users";
 import Trash from "./pages/Trash";
 import TaskDetails from "./pages/TaskDetails"; 
