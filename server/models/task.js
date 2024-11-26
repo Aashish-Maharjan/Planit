@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import mongoose from "mongoose";
 
 const taskSchema=new Schema({
     title:{type:String,required:true},
@@ -17,7 +18,7 @@ const taskSchema=new Schema({
             enum:["assigned","started","inprogress","bug","completed","comented"],},
             activity:String,
             date:{type:Date,default:new Date()},
-            by:{type:Schema.Types.ObjectId,ref:"User"};
+            by:{type:Schema.Types.ObjectId,ref:"User"}
     },
     
     subTasks:[
