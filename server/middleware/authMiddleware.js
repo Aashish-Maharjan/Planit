@@ -1,9 +1,9 @@
-import jwt, { decode } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import User from "../models/user.js"
 
 const protectRoute=async(req,res,next)=>{
     try {
-        let token=res.cookie.token;
+        let token=req.cookies?.token;
         if(token){
             const decodedToken=jwt.verify(token,process.env.JWT_SECRET);
             
@@ -17,6 +17,9 @@ const protectRoute=async(req,res,next)=>{
             };
             next();
         }
+        else{
+            return res.status(401).json({status:false,message:"Not authorized.Try login again."});
+        }
 
     } catch (error) {
         console.log(error);
@@ -26,7 +29,7 @@ const protectRoute=async(req,res,next)=>{
     }
 }
 const isAdminRoute=(req,res,next)=>{
-    if(req.user&& req.user.isAdmin){
+    if(req.user && req.user.isAdmin){
         next();
     }else{
         return res.status(401).json({

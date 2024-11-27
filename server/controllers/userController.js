@@ -5,11 +5,11 @@ import { createJWT } from "../utils/index.js";
 export const registerUser=async(req,res)=>{
     try {
         const{name,email,password,isAdmin,role,title}=req.body;
-s
+
         const userExist=await User.findOne({email});
 
         if(userExist){
-            return res.status(400).json({message:"User already exist"});
+            return res.status(400).json({message:`User already exist`});
         } 
         
         const user=await User.create({
@@ -18,10 +18,10 @@ s
         if(user){
             isAdmin?createJWT(res,user._id):null;
             user.password=undefined;
-            res.status(201).json(user);
+            res.status(200).json(user);
         }
         else{
-            res.status(400).json({message:"Invalid user data"});
+            res.status(400).json({message:`Invalid user data`});
         }
     } catch (error) {
         return res
@@ -33,15 +33,15 @@ s
 export const loginUser=async(req,res)=>{
     try {
         const {email,password}=req.body
-        const user=await User.findOn({email})
+        const user=await User.findOne({email})
 
         if(!user){
             return res  
             .status(400)
-            .json({message:"Invalid email or password"});
+            .json({message:`Invalid email or password`});
         }
         if(user?.isActive){
-            return res.status(401).json({status:false,message:"User account has been deactivated,contact the administrator",})
+            return res.status(401).json({status:false,message:`User account has been deactivated,contact the administrator`,})
         }
         const isMatch=await user.matchPassword(password)
         if(user&&isMatch){
@@ -52,7 +52,7 @@ export const loginUser=async(req,res)=>{
         else{
             return res
             .status(401)
-            .json({status:false,message:"Invaid email or password"})
+            .json({status:false,message:`Invaid email or password`})
         }
     } catch (error) {
         console.log(error);
@@ -65,7 +65,7 @@ export const logoutUser=async(req,res)=>{
             httpOnly:true,
             expires:new Date(0),
         });
-        res.status(200).json({message:"Logout Successfull"})
+        res.status(200).json({message:`Logout Successfull`})
     } catch (error) {
         console.log(error);
         return res.status(400).json({status:false,message:error.message})
@@ -73,7 +73,7 @@ export const logoutUser=async(req,res)=>{
 }
 export const getTeamList=async(req,res)=>{
     try {
-        const users=await User.find().select("name title role email isActive");
+        const users=await User.find().select(`name title role email isActive`);
         res.status(200).json(users)
     } catch (error) {
         console.log(error);
@@ -114,9 +114,9 @@ export const updateUserProfile=async(req,res)=>{
 
             user.password=undefined;
 
-            res.status(201).json({status:true,message:"Profile Update Successfully.",user:updatedUser})
+            res.status(201).json({status:true,message:`Profile Update Successfully.`,user:updatedUser})
         }else{
-            res.status(404).json({status:false,message:"User Not Found"})
+            res.status(404).json({status:false,message:`User Not Found`})
         }
     } catch (error) {
         console.log(error);
@@ -142,7 +142,7 @@ export const markNotificationRead=async(req,res)=>{
                 {new:true}
             );
         }
-        res.status(201).json({status:true,message:"DONE"})
+        res.status(201).json({status:true,message:`DONE`})
     } catch (error) {
         console.log(error);
         return res.status(400).json({status:false,message:error.message})
@@ -159,7 +159,7 @@ export const changeUserPassword=async(req,res)=>{
             res.status(201).json({status:true,message:`Password Changed successfully.`})
         }
         else{
-            res.status(404).json({status:false,message:"User Not Found"})
+            res.status(404).json({status:false,message:`User Not Found`})
         }
     } catch (error) {
         console.log(error);
@@ -180,7 +180,7 @@ export const activateUserProfile=async(req,res)=>{
             });
         }
         else{
-            res.status(404).json({status:false,message:"User Not Found"})
+            res.status(404).json({status:false,message:`User Not Found`})
         }
     } catch (error) {
         console.log(error);
@@ -192,7 +192,7 @@ export const deleteUserProfile=async(req,res)=>{
         const{id}=req.params;
         await User.findByIdAndDelete(id);
         res
-        .status(200).json({status:true,message:"User deleted successfully."})
+        .status(200).json({status:true,message:`User deleted successfully.`})
     } catch (error) {
         console.log(error);
         return res.status(400).json({status:false,message:error.message})

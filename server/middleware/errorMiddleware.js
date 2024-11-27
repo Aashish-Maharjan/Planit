@@ -11,10 +11,10 @@ const errorHandler=(err,req,res,next)=>{
         statusCode=400;
         message="Resource not found";
     }
-    req.status(statusCode).json({
+    res.status(statusCode).json({
         message:message,
-        stack:process.env.NODE_ENV !== "production"?err.stack:null
+        stack:process.env.NODE_ENV !== "production"? null:err.stack,
     
-    })
+    });
 };
 export {routeNotFound,errorHandler};
