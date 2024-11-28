@@ -104,16 +104,18 @@ export const updateUserProfile=async(req,res)=>{
             ?userId
             :isAdmin&&userId!==_id?_id
             :userId;
+           
         const user =await User.findById(id)
         if(user){
             user.name=req.body.name||user.name;  
             user.title=req.body.title||user.title;
             user.role=req.body.role||user.role;
+            user.isActive=req.body.isActive;
             
-            const updatedUser=await User.save()
+            const updatedUser=await user.save()
 
             user.password=undefined;
-
+            console.log("asdasd",req.body,user,updatedUser);
             res.status(201).json({status:true,message:`Profile Update Successfully.`,user:updatedUser})
         }else{
             res.status(404).json({status:false,message:`User Not Found`})
@@ -171,7 +173,7 @@ export const activateUserProfile=async(req,res)=>{
         const{id}=req.params;
         const user=await User.findById(id);
         if(user){
-            user.isActive=req.body.isActive;
+            user.isActive=req.params.isActive;
             await user.save();
             user.password=undefined;
             res.status(201).json({
@@ -190,6 +192,9 @@ export const activateUserProfile=async(req,res)=>{
 export const deleteUserProfile=async(req,res)=>{
     try {
         const{id}=req.params;
+        console.log(req.params);
+
+        
         await User.findByIdAndDelete(id);
         res
         .status(200).json({status:true,message:`User deleted successfully.`})

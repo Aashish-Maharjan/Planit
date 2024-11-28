@@ -18,6 +18,7 @@ const Users = () => {
   const [openAction, setOpenAction] = useState(false);
   const [selected, setSelected] = useState(null);
 
+  
 
   const{data,isLoading,error,refetch}=useGetTeamListQuery() ;
   const[deleteUser]=useDeleteUserMutation();
@@ -28,39 +29,48 @@ const Users = () => {
     try {
       const result=await userAction({
         isActive:!selected?.isActive,
-        id:selected?._id,
+        _id:selected?._id,
       })
-      refetch()
-      toast.success(result.data.message);
+      refetch();
+      if(result?.data?.status===true){
+        toast.success("Updated Successfully");
+      }
       setSelected(null);
       setTimeout(() => {
         setOpenAction(false);
       }, 500);
     } catch (error) {
       console.log(error);
-      toast.error(err?.data?.message||err.error)
+      toast.error(error?.data?.message||error.message)
     }
   };
 
   const deleteHandler = async() => {
     try {
-      const result=await deleteUser(selected)
+      console.log(selected);
+      const result = await deleteUser(selected._id);
+
 
       refetch();
-      toast.success(result.data.message);
+      
+      if(result?.data?.status===true){
+        toast.success("Deleted Successfully");
+      }
+      
       setSelected(null);
+       
       setTimeout(() => {
         setOpenDialog(false);
       }, 500);
     } catch (error) {
       console.log(error);
-      toast.error(err?.data?.message||err.error)
+      toast.error(error?.data?.message||error.message)
       
     }
   };
 
-  const deleteClick = (id) => {
-    setSelected(id);
+  const deleteClick = (selected) => {
+    setSelected(selected);
     setOpenDialog(true);
   };
 
@@ -68,6 +78,11 @@ const Users = () => {
     setSelected(el);
     setOpen(true);
   };
+
+  const userStatusClick=(el)=>{
+    setSelected(el);
+    setOpenAction(true);
+  }
 
   const TableHeader = () => (
     <thead className='border-b border-gray-300'>
@@ -79,7 +94,7 @@ const Users = () => {
         <th className='py-2'>Active</th>
       </tr>
     </thead>
-  );
+  );  
 
   const TableRow = ({ user }) => (
     <tr className='border-b border-gray-200 text-gray-600 hover:bg-gray-400/10'>
@@ -122,7 +137,7 @@ const Users = () => {
           className='text-red-700 hover:text-red-500 font-semibold sm:px-0'
           label='Delete'
           type='button'
-          onClick={() => deleteClick(user?._id)}
+          onClick={() => deleteClick(user)}
         />
       </td>
     </tr>
@@ -137,7 +152,7 @@ const Users = () => {
             label='Add New User'
             icon={<IoMdAdd className='text-lg' />}
             className='flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5'
-            onClick={setOpen(true)}
+            onClick={()=>setOpen(true)}
           />
         </div>
 

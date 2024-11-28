@@ -7,7 +7,8 @@ import Textbox from "./Textbox";
 import Loading from "./Loader";
 import Button from "./Button";
 import { useRegisterMutation } from "../redux/slices/api/authApiSlice";
-import { useUpdateUserMutation } from "../redux/slices/api/userApiSlice";
+import { useGetTeamListQuery, useUpdateUserMutation } from "../redux/slices/api/userApiSlice";
+import {toast} from "sonner";
 
 const AddUser = ({ open, setOpen, userData }) => {
   let defaultValues = userData ?? {};
@@ -20,21 +21,26 @@ const AddUser = ({ open, setOpen, userData }) => {
     formState: { errors },
   } = useForm({ defaultValues });
   const dispatch=useDispatch();
+  const{refetch}=useGetTeamListQuery() ;
   const [addNewUser,{isLoading}]=useRegisterMutation();
   const[updateUser,{isLoading:isUpdating}]=useUpdateUserMutation();
   const handleOnSubmit = async(data) => {
     try {
       if(userData){  
         const result=await updateUser(data).unwrap();
-
-        toast.success(result?.message);
+        refetch();
+        if(result?.data?.status===true){
+          toast.success("Updated Successfully");
+        }
         if(userData?._id===user._id){
           dispatch(setCredentials({...result.user}))
         }
       }else{
         const result=await addNewUser({...data, password:data.email}).unwrap();
-
-        toast.success("New User added successfully");
+         refetch();
+        if(result?.data?.status===true){
+          toast.success("Created Successfully");
+        }
       }
       setTimeout(()=>{
         setOpen(false)

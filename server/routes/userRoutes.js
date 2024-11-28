@@ -17,7 +17,7 @@ router.put("/change-password", protectRoute, changeUserPassword);
 
 //admin//
 router
-    .route("./id")
+    .route("/:id")
     .put(protectRoute,isAdminRoute,activateUserProfile)
     .delete(protectRoute,isAdminRoute,deleteUserProfile)
 

@@ -7,29 +7,64 @@ import UserList from "./UserList";
 import SelectList from "../SelectList";
 import { BiImages } from "react-icons/bi";
 import Button from "../Button";
+import { useDispatch } from "react-redux";
+import { useCreateTaskMutation, useGetTaskQuery, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
 
 const uploadedFileURLs = [];
 
-const AddTask = ({ open, setOpen }) => {
+const AddTask = ({ open, setOpen ,taskData}) => {
   const task = "";
+  let defaultValues = taskData ?? {};
+ 
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const{data:userList,isLoading:userListLoading,error,refetch:userListRefetch}=useGetTeamListQuery() ;
+  
   const [team, setTeam] = useState(task?.team || []);
   const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);
   const [priority, setPriority] = useState(
     task?.priority?.toUpperCase() || PRIORIRY[2]
   );
+
   const [assets, setAssets] = useState([]);
   const [uploading, setUploading] = useState(false);
 
-  const submitHandler = () => {};
+
+
+  const dispatch=useDispatch();
+  const{refetch}=useGetTaskQuery();
+   const [addNewTask,{isLoading}]=useCreateTaskMutation();
+  const[updateTask,{isLoading:isUpdating}]=useUpdateTaskMutation();
+  const submitHandler = async(data) => {
+      try {
+        if(taskData){  
+          const result=await updateTask(data).unwrap();
+          refetch();
+          if(result?.data?.status===true){
+            toast.success("Updated Successfully");
+          }
+        }else{
+          const result=await addNewTask(data).unwrap();
+           refetch();
+          if(result?.data?.status===true){
+            toast.success("Created Successfully");
+          }
+        }
+        setTimeout(()=>{
+          setOpen(false)
+        },1500)
+      } catch (error) {
+        toast.error("Something went wrong")
+      }
+  };
 
   const handleSelect = (e) => {
     setAssets(e.target.files);

@@ -189,7 +189,7 @@ export const getTasks=async(req,res)=>{
 
         const tasks=await queryResult;
 
-        res .status(200).json({status:true,tasks});
+        res.status(200).json(tasks);
 
     } catch (error) {
         console.log(error);

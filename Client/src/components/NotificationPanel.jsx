@@ -54,7 +54,7 @@ const NotificationPanel = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  //  const { data, refetch } = useGetNotificationsQuery();
+  //const { data, refetch } = useGetNotificationsQuery();
   //  const [markAsRead] = useMarkNotiAsReadMutation();
 
   const readHandler = () => {};
