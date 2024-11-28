@@ -11,7 +11,7 @@ import { FaArrowsToDot } from "react-icons/fa6";
 import moment from "moment";
 import { summary } from "../assets/data";
 import clsx from "clsx";
-import  Chart  from "../components/Chart";
+import { Chart } from "../components/Chart";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
 import UserInfo from "../components/UserInfo";
 
@@ -110,6 +110,7 @@ const UserTable = ({ users }) => {
           <div className='w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700'>
             <span className='text-center'>{getInitials(user?.name)}</span>
           </div>
+
           <div>
             <p> {user.name}</p>
             <span className='text-xs text-black'>{user?.role}</span>

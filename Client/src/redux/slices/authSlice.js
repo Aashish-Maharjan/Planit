@@ -14,7 +14,7 @@ const authSlice = createSlice({
         setCredentials:(state,action)=>{
             /*action of the payload being assigned to the user */
             state.user=action.payload;
-            localStorage.setItems('userInfo',JSON.stringify(action.payload));
+            localStorage.setItem('userInfo',JSON.stringify(action.payload));
         },
         logout:(state,action)=>{ 
             state.user=null;
