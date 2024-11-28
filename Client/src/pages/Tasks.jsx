@@ -12,7 +12,7 @@ import BoardView from "../components/BoardView";
 
 import Table from "../components/task/Table";
 import AddTask from "../components/task/AddTask";
-import { useGetTaskQuery } from "../redux/slices/api/taskApiSlice";
+import {useGetTaskQuery } from "../redux/slices/api/taskApiSlice";
 
 const TABS = [
   { title: "Board View", icon: <MdGridView /> },
@@ -35,7 +35,7 @@ const Tasks = () => {
   
   const{data,isLoading,error,refetch}=useGetTaskQuery() ;
   const status = params?.status || "";
-  
+
 useEffect(() => {
     console.log("open state changed:", data);
   }, [data]);

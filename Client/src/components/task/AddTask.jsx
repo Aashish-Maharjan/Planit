@@ -10,6 +10,7 @@ import Button from "../Button";
 import { useDispatch } from "react-redux";
 import { useCreateTaskMutation, useGetTaskQuery, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
 import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
+import {toast} from "sonner";
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
@@ -44,6 +45,7 @@ const AddTask = ({ open, setOpen ,taskData}) => {
    const [addNewTask,{isLoading}]=useCreateTaskMutation();
   const[updateTask,{isLoading:isUpdating}]=useUpdateTaskMutation();
   const submitHandler = async(data) => {
+    console.log(data);
       try {
         if(taskData){  
           const result=await updateTask(data).unwrap();
@@ -92,10 +94,11 @@ const AddTask = ({ open, setOpen ,taskData}) => {
               error={errors.title ? errors.title.message : ""}
             />
 
-            <UserList setTeam={setTeam} team={team} />
+            <UserList setTeam={setTeam} team={team} users={userList} />
 
             <div className='flex gap-4'>
               <SelectList
+                name="stage"
                 label='Task Stage'
                 lists={LISTS}
                 selected={stage}
@@ -119,13 +122,14 @@ const AddTask = ({ open, setOpen ,taskData}) => {
 
             <div className='flex gap-4'>
               <SelectList
+                name="priority"
                 label='Priority Level'
                 lists={PRIORIRY}
                 selected={priority}
                 setSelected={setPriority}
               />
 
-              <div className='w-full flex items-center justify-center mt-4'>
+              {/* <div className='w-full flex items-center justify-center mt-4'>
                 <label
                   className='flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer my-4'
                   htmlFor='imgUpload'
@@ -141,7 +145,7 @@ const AddTask = ({ open, setOpen ,taskData}) => {
                   <BiImages />
                   <span>Add Assets</span>
                 </label>
-              </div>
+              </div> */}
             </div>
 
             <div className='bg-gray-50 py-6 sm:flex sm:flex-row-reverse gap-4'>

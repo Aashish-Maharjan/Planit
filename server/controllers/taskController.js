@@ -295,6 +295,7 @@ export const deleteRestoreTask=async(req,res)=>{
         const{actionType}=req.query;
 
         if(actionType=="delete"){
+            console.log("server",id);
             await Task.findByIdAndDelete(id);
         }else if(actionType="deleteAll"){
             await Task.deleteMany({isTrashed:true});

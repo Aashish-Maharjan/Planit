@@ -13,6 +13,7 @@ import { FaList } from "react-icons/fa";
 import UserInfo from "../UserInfo";
 import Button from "../Button";
  import ConfirmatioDialog from "../Dialogs";
+import { useTrashTaskMutation } from "../../redux/slices/api/taskApiSlice";
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -23,13 +24,37 @@ const ICONS = {
 const Table = ({ tasks }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selected, setSelected] = useState(null);
+  const[trashTask]=useTrashTaskMutation();
 
-  const deleteClicks = (id) => {
-    setSelected(id);
+  const deleteClicks = (selected) => {
+    setSelected(selected);
     setOpenDialog(true);
   };
 
-  const deleteHandler = () => {};
+
+    const deleteHandler = async() => {
+      try {
+        console.log(selected);
+        const result = await trashTask({selected:selected._id,isTrash:"trash"}).unwrap();
+  
+  
+        refetch();
+        
+        if(result?.data?.status===true){
+          toast.success("Deleted Successfully");
+        }
+        
+        setSelected(null);
+         
+        setTimeout(() => {
+          setOpenDialog(false);
+        }, 500);
+      } catch (error) {
+        console.log(error);
+        toast.error(error?.data?.message||error.message)
+        
+      }
+  };
 
   const TableHeader = () => (
     <thead className='w-full border-b border-gray-300'>
@@ -117,7 +142,7 @@ const Table = ({ tasks }) => {
           className='text-red-700 hover:text-red-500 sm:px-0 text-sm md:text-base'
           label='Delete'
           type='button'
-          onClick={() => deleteClicks(task._id)}
+          onClick={() => deleteClicks(task)}
         />
       </td>
     </tr>
@@ -129,7 +154,7 @@ const Table = ({ tasks }) => {
           <table className='w-full '>
             <TableHeader />
             <tbody>
-              {tasks.map((task, index) => (
+              {tasks?.map((task, index) => (
                 <TableRow key={index} task={task} />
               ))}
             </tbody>
