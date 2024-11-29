@@ -35,7 +35,7 @@ export const userApiSlice=apiSlice.injectEndpoints({
                 credentials:"include",
             })
         }),
-        getNotification:builder.mutation({
+        getNotification:builder.query({
             query:()=>({
                 url:`${USER_URL}/notifications`,
                 method:"GET",
@@ -61,4 +61,4 @@ export const userApiSlice=apiSlice.injectEndpoints({
     })
 })
 
-export const{useUpdateUserMutation,useGetTeamListQuery,useDeleteUserMutation,useUserActionMutation,useGetNotificationMutation,useMarkNotiAsReadMutation,useChangePasswordMutation}=userApiSlice
+export const{useUpdateUserMutation,useGetTeamListQuery,useDeleteUserMutation,useUserActionMutation,useGetNotificationQuery,useMarkNotiAsReadMutation,useChangePasswordMutation}=userApiSlice

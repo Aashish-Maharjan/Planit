@@ -4,9 +4,10 @@ import { BsChevronExpand } from "react-icons/bs";
 import clsx from "clsx";
 import { getInitials } from "../../utils";
 import { MdCheck } from "react-icons/md";
+import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
 
-const UserList = ({ setTeam, team ,users}) => {
-  const data = users;
+const  UserList = ({ setTeam, team ,users}) => {
+  const {data,isLoading} = useGetTeamListQuery();
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const handleChange = (el) => {
@@ -19,7 +20,7 @@ const UserList = ({ setTeam, team ,users}) => {
     } else {
       setSelectedUsers(team);
     }
-  }, []);
+  }, [isLoading]);
 
   return (
     <div>

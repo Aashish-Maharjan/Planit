@@ -1,4 +1,4 @@
-import { updateTask } from "../../../../../server/controllers/taskController"
+import { duplicateTask, updateTask } from "../../../../../server/controllers/taskController"
 import { apiSlice } from "../apiSlice"
 
 const TASK_URL ="/task" 
@@ -8,15 +8,15 @@ export const taskApiSlice=apiSlice.injectEndpoints({
     endpoints:(builder)=>({
         updateTask:builder.mutation({
             query:(data)=>({
-                url:`${TASK_URL}/update/${id}`,
+                url:`${TASK_URL}/update/${data._id}`,
                 method:"PUT",
                 body:data,
                 credentials:"include",
             })
         }),
-        getTask:builder.query({
-            query:()=>({
-                url:`${TASK_URL}/`,
+        getAllTask:builder.query({
+            query:({strQuery ,isTrashed ,search })=>({
+                url:`${TASK_URL}?stage=${strQuery}&isTrashed=${isTrashed}&search=${search}`,
                 method:"GET",
                 credentials:"include",
             })
@@ -24,6 +24,14 @@ export const taskApiSlice=apiSlice.injectEndpoints({
         createTask:builder.mutation({
             query:(data)=>({
                 url:`${TASK_URL}/create`,
+                method:"POST",
+                body:data,
+                credentials:"include",
+            })
+        }),
+        duplicateTask:builder.mutation({
+            query:(id)=>({
+                url:`${TASK_URL}/duplicate/${id}`,
                 method:"POST",
                 body:data,
                 credentials:"include",
@@ -40,4 +48,4 @@ export const taskApiSlice=apiSlice.injectEndpoints({
     })
 })
 
-export const{useUpdateTaskMutation,useGetTaskQuery,useCreateTaskMutation,useTrashTaskMutation}=taskApiSlice
+export const{useUpdateTaskMutation,useGetAllTaskQuery,useCreateTaskMutation,useDuplicateTaskMutation,useTrashTaskMutation}=taskApiSlice

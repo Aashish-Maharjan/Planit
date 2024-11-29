@@ -8,7 +8,7 @@ import SelectList from "../SelectList";
 import { BiImages } from "react-icons/bi";
 import Button from "../Button";
 import { useDispatch } from "react-redux";
-import { useCreateTaskMutation, useGetTaskQuery, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
+import { useCreateTaskMutation, useGetAllTaskQuery, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
 import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
 import {toast} from "sonner";
 
@@ -41,7 +41,7 @@ const AddTask = ({ open, setOpen ,taskData}) => {
 
 
   const dispatch=useDispatch();
-  const{refetch}=useGetTaskQuery();
+  const{refetch}=useGetAllTaskQuery();
    const [addNewTask,{isLoading}]=useCreateTaskMutation();
   const[updateTask,{isLoading:isUpdating}]=useUpdateTaskMutation();
   const submitHandler = async(data) => {
