@@ -33,7 +33,7 @@ export const taskApiSlice=apiSlice.injectEndpoints({
             query:(id)=>({
                 url:`${TASK_URL}/duplicate/${id}`,
                 method:"POST",
-                body:data,
+                body:{},
                 credentials:"include",
             })
         }),

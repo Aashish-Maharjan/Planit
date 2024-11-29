@@ -17,9 +17,9 @@ const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
 
 const uploadedFileURLs = [];
 
-const AddTask = ({ open, setOpen ,taskData}) => {
-  const task = "";
-  let defaultValues = taskData ?? {};
+const AddTask = ({ open, setOpen ,task}) => {
+  
+  let defaultValues = task?? {};
  
 
   const {
@@ -41,32 +41,37 @@ const AddTask = ({ open, setOpen ,taskData}) => {
 
 
   const dispatch=useDispatch();
-  const{refetch}=useGetAllTaskQuery();
-   const [addNewTask,{isLoading}]=useCreateTaskMutation();
+  const{refetch}=useGetAllTaskQuery({
+    strQuery:"",
+    search:"",
+    isTrashed:""
+  });
+   const [createTask,{isLoading}]=useCreateTaskMutation();
   const[updateTask,{isLoading:isUpdating}]=useUpdateTaskMutation();
+  const URLS = task?.assets?[...task.assets]:[];
+
   const submitHandler = async(data) => {
-    console.log(data);
-      try {
-        if(taskData){  
-          const result=await updateTask(data).unwrap();
-          refetch();
-          if(result?.data?.status===true){
-            toast.success("Updated Successfully");
-          }
-        }else{
-          const result=await addNewTask(data).unwrap();
-           refetch();
-          if(result?.data?.status===true){
-            toast.success("Created Successfully");
-          }
-        }
-        setTimeout(()=>{
-          setOpen(false)
-        },1500)
-      } catch (error) {
-        toast.error("Something went wrong")
+    try{
+      const newData={
+        ...data,
+        team,
+        stage:stage.replace(/ /g,''),
+        priority,
       }
+      const res =task?._id
+      ?await updateTask({...newData,_id:task._id}).unwrap()
+      :await createTask(newData).unwrap();
+      
+      toast.success(res.message);
+      setTimeout(() => {
+        setOpen(false);
+      }, 500);
+    }
+    catch(err){
+      console.log(err);
+      toast.error(err?.data?.message||err.error)
   };
+}
 
   const handleSelect = (e) => {
     setAssets(e.target.files);

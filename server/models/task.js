@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const taskSchema=new Schema({
     title:{type:String,required:true},
     date:{type:Date,default:new Date()},
-    priority:{type:String,default:"normal",enum:["high","medium","low"]
+    priority:{type:String,default:"normal",enum:["normal","high","medium","low"]
     },
     stage:{
         type:String,
