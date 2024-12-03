@@ -34,7 +34,7 @@ export const userApiSlice=apiSlice.injectEndpoints({
                 body:data,
                 credentials:"include",
             })
-        }),
+        }), 
         getNotification:builder.query({
             query:()=>({
                 url:`${USER_URL}/notifications`,

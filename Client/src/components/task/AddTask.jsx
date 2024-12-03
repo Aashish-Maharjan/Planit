@@ -61,14 +61,13 @@ const AddTask = ({ open, setOpen ,task}) => {
       const res =task?._id
       ?await updateTask({...newData,_id:task._id}).unwrap()
       :await createTask(newData).unwrap();
-      
+      refetch();
       toast.success(res.message);
       setTimeout(() => {
         setOpen(false);
-      }, 500);
+      }, 50);
     }
     catch(err){
-      console.log(err);
       toast.error(err?.data?.message||err.error)
   };
 }

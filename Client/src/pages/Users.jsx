@@ -24,17 +24,15 @@ const Users = () => {
   const[deleteUser]=useDeleteUserMutation();
   const[userAction]=useUserActionMutation();
 
-  console.log(data,error);
-  const userActionHandler =async() => {
+  console.log(data,error); 
+  const userActionHandler = async() => {
     try {
       const result=await userAction({
         isActive:!selected?.isActive,
         _id:selected?._id,
-      })
+      });
       refetch();
-      if(result?.data?.status===true){
-        toast.success("Updated Successfully");
-      }
+      toast.success(result.data.message);
       setSelected(null);
       setTimeout(() => {
         setOpenAction(false);
@@ -54,7 +52,7 @@ const Users = () => {
       refetch();
       
       if(result?.data?.status===true){
-        toast.success("Deleted Successfully");
+        toast.success(result.data.message);
       }
       
       setSelected(null);
