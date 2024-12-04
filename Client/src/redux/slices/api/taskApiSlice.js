@@ -1,4 +1,3 @@
-import { duplicateTask, updateTask } from "../../../../../server/controllers/taskController"
 import { apiSlice } from "../apiSlice"
 
 const TASK_URL ="/task" 
@@ -44,8 +43,22 @@ export const taskApiSlice=apiSlice.injectEndpoints({
                 credentials:"include",   
             })
         }),
+        getDashboardStats:builder.query({
+            query:()=>({
+                url:`${TASK_URL}/dashboard`,
+                method:"GET",
+                credentials:"include",
+            })
+        }),
+        deleteRestoreTask:builder.mutation({
+            query:({id,actionType})=>({
+                url:`${TASK_URL}/delete-restore/${id}?actionType=${actionType}`,
+                method:"DELETE",
+                credentials:"include",
+            })
+        })
        
     })
 })
 
-export const{useUpdateTaskMutation,useGetAllTaskQuery,useCreateTaskMutation,useDuplicateTaskMutation,useTrashTaskMutation}=taskApiSlice
+export const{useDeleteRestoreTaskMutation,useUpdateTaskMutation,useGetAllTaskQuery,useCreateTaskMutation,useDuplicateTaskMutation,useTrashTaskMutation,useGetDashboardStatsQuery}=taskApiSlice

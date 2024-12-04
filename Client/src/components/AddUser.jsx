@@ -20,6 +20,7 @@ const AddUser = ({ open, setOpen, userData }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({ defaultValues });
+
   const dispatch=useDispatch();
   const{refetch}=useGetTeamListQuery() ;
   const [addNewUser,{isLoading}]=useRegisterMutation();
@@ -39,7 +40,7 @@ const AddUser = ({ open, setOpen, userData }) => {
         const result=await addNewUser({...data, password:data.email}).unwrap();
          refetch();
         if(result?.data?.status===true){
-          toast.success("Created Successfully");
+          toast.success("New User added successfully");
         }
       }
       setTimeout(()=>{

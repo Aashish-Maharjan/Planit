@@ -9,9 +9,9 @@ const taskSchema=new Schema({
     stage:{
         type:String,
         default:"todo",
-        enum:["todo","inprogress","completed"]
+        enum:["completed","inprogress","todo",]
     },
-    activities:{
+    activities:{ 
         type:{
             type:String,
             defautl:"assigned",

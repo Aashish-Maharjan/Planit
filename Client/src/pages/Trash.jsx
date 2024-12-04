@@ -13,7 +13,8 @@ import Button from "../components/Button";
 import { PRIOTITYSTYELS, TASK_TYPE } from "../utils";
 import AddUser from "../components/AddUser";
 import ConfirmatioDialog from "../components/Dialogs";
-
+import { useDeleteRestoreTaskMutation, useGetAllTaskQuery } from "../redux/slices/api/taskApiSlice";
+import Loading from "../components/Loader";
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
   medium: <MdKeyboardArrowUp />,
@@ -26,6 +27,14 @@ const Trash = () => {
   const [msg, setMsg] = useState(null);
   const [type, setType] = useState("delete");
   const [selected, setSelected] = useState("");
+
+  const {data, isLoading} = useGetAllTaskQuery({
+    strQuery: " ",
+    isTrashed: "true",
+    search: "",
+  });
+  console.log(data,"trask ko")
+  const [deleteRestoreTask]=useDeleteRestoreTaskMutation();
 
   const deleteAllClick = () => {
     setType("deleteAll");
@@ -51,7 +60,12 @@ const Trash = () => {
     setMsg("Do you want to restore the selected item?");
     setOpenDialog(true);
   };
-
+  if(isLoading)
+    return(
+      <div className="py-10">
+        <Loading />
+      </div>
+    )
   const TableHeader = () => (
     <thead className='border-b border-gray-300'>
       <tr className='text-black  text-left'>
@@ -129,7 +143,7 @@ const Trash = () => {
             <table className='w-full mb-5'>
               <TableHeader />
               <tbody>
-                {tasks?.map((tk, id) => (
+                {data?.tasks?.map((tk, id) => (
                   <TableRow key={id} item={tk} />
                 ))}
               </tbody>
