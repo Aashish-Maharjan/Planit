@@ -29,23 +29,22 @@ const AddUser = ({ open, setOpen, userData }) => {
     try {
       if(userData){  
         const result=await updateUser(data).unwrap();
-        refetch();
-        if(result?.data?.status===true){
-          toast.success("Updated Successfully");
-        }
-        if(userData?._id===user._id){
+
+        toast.success("Profile Updated Successfully");
+        // if(result?.data?.status===true){
+        //   toast.success("Updated Successfully");
+        // }
+        if(userData?._id===user > _id){
           dispatch(setCredentials({...result.user}))
         }
       }else{
-        const result=await addNewUser({...data, password:data.email}).unwrap();
-         refetch();
-        if(result?.data?.status===true){
+        await addNewUser({...data, password:data.email}).unwrap();
+        
           toast.success("New User added successfully");
-        }
       }
       setTimeout(()=>{
         setOpen(false)
-      },50)
+      },1500)
     } catch (error) {
       toast.error("Something went wrong")
     }

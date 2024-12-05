@@ -83,7 +83,7 @@ export const getTeamList=async(req,res)=>{
 export const getNotificationsList=async(req,res)=>{
     try {
         const {userId}=req.user;
-        const notice =await Notice.findOne({
+        const notice =await Notice.find({
             team:userId,
             isRead:{$nin:[userId]},
         }).populate("tasks","title");

@@ -1,17 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState={
-    user:localStorage.getItem('userInfo')?(localStorage.getItem('userInfo'))
-    :null,
+    user: localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : user,
 
     isSidebarOpen:false,
 };
+
 
 const authSlice = createSlice({
     name:'auth',
     initialState,
     reducers:{
         setCredentials:(state,action)=>{
+            console.log(1234);
             /*action of the payload being assigned to the user */
             state.user=action.payload;
             localStorage.setItem('userInfo',JSON.stringify(action.payload));

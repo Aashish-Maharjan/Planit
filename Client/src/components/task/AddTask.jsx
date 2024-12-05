@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useCreateTaskMutation, useGetAllTaskQuery, useUpdateTaskMutation } from "../../redux/slices/api/taskApiSlice";
 import { useGetTeamListQuery } from "../../redux/slices/api/userApiSlice";
 import {toast} from "sonner";
+import { dateFormatter } from "../../utils";
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
@@ -19,14 +20,22 @@ const uploadedFileURLs = [];
 
 const AddTask = ({ open, setOpen ,task}) => {
   
-  let defaultValues = task?? {};
+  const defaultValues = {
+    title:task?.title || "",
+    date:dateFormatter(task?.date||new Date()),
+    team:[],
+    stage:"",
+    priority:"",
+    assets:[],
+  };
  
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm(defaultValues);
+  
   const{data:userList,isLoading:userListLoading,error,refetch:userListRefetch}=useGetTeamListQuery() ;
   
   const [team, setTeam] = useState(task?.team || []);

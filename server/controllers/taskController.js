@@ -245,7 +245,7 @@ export const createSubTask = async(req,res)=>{
        await task.save();
 
        res.status(200)
-       .json({status:true,message:`Subtask created successfully`});
+       .json({status:true,message:`Subtask added successfully`});
     } catch (error) {
         console.log(error);
         return res.status(400).json({status:false,message:error.message});

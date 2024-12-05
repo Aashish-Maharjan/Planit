@@ -33,11 +33,13 @@ const Table = ({ tasks }) => {
     setSelected(selected);
     setOpenDialog(true);
   };
-
+  const editTaskHandler=(el)=>{
+    setSelected(el);
+    setOpenEdit(true);
+  }
 
     const deleteHandler = async() => {
       try {
-        console.log(selected);
         const result = await trashTask({
           id:selected._id,
           isTrash:"trash"}).unwrap();
@@ -136,6 +138,7 @@ const Table = ({ tasks }) => {
           className='text-blue-600 hover:text-blue-500 sm:px-0 text-sm md:text-base'
           label='Edit'
           type='button'
+          onClick={() => editTaskHandler(task)}
         />
 
         <Button
@@ -171,7 +174,7 @@ const Table = ({ tasks }) => {
       <AddTask
         open={openEdit}
         setOpen={setOpenEdit}
-        task={tasks}
+        task={selected}
         key={new Date().getTime()}
       />
     </>

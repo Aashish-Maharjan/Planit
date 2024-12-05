@@ -13,11 +13,17 @@ import { useRef ,Fragment} from 'react';
 import clsx from 'clsx';
 import{IoClose} from "react-icons/io5"
 import { Transition } from '@headlessui/react';
+import { setCredentials } from './redux/slices/authSlice';
 
 function Layout(){
+  
   const { user } = useSelector((state)=>state.auth);
   
   const location=useLocation();
+  const dispatch=useDispatch();
+
+  console.log(user,1234);
+  // dispatch(setCredentials(localStorage.getItem('userInfo')));
   
   return user ? (
     <div className='w-full h-screen flex flex-col md:flex-row'>
