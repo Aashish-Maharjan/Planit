@@ -117,11 +117,11 @@ export const dashboardStatistics= async(req,res)=>{
         path:"team",
         select:"name role title email",
      })
-     .sort({_id:-1 })
+     .sort({_id : -1 })
      :await Task.find({
         isTrashed:false,
         team:{$all:[userId ]},
-     })
+     }) 
         .populate({
             path:"team",
             select:"name role title email",
@@ -129,7 +129,7 @@ export const dashboardStatistics= async(req,res)=>{
         .sort({_id:-1});
     
     const users=await User.find({isActive:true})
-        .select(`name title role isAdmim createdAt`)
+        .select("name title role isAdmim createdAt")
         .limit(10)
         .sort({_id:-1})
 
@@ -140,12 +140,12 @@ export const dashboardStatistics= async(req,res)=>{
             result[stage]=1;
         }
         else{
-            result +=1;
+            result[stage] +=1;
         }
         return result;
     },{});
     //group tasks by priority
-    const groupData=object.entries(
+    const groupData=Object.entries(
         allTasks.reduce((result,task)=>{
             const {priority}=task;
             result[priority]=(result[priority]||0)+1; 
@@ -172,29 +172,36 @@ export const dashboardStatistics= async(req,res)=>{
     }
 }
 
-export const getTasks=async(req,res)=>{
+export const getTasks = async(req,res)=>{
     try {
-        const {stage,isTrashed}=req.query;
-
-        let query={isTrashed:isTrashed?true:false};
-
-        if(stage){
-            query.stage=stage;
+        const { stage, isTrashed } = req.query;
+    
+        let query = { isTrashed: isTrashed ? true : false };
+    
+        if (stage) {
+          query.stage = stage;
         }
-        let queryResult=Task.find(query).populate({
-            path:"team",
-            select:"name title email",
-        }).sort({_id:-1})
+    
+        let queryResult = Task.find(query)
+          .populate({
+            path: "team",
+            select: "name title email",
+          })
+          .sort({ _id: -1 });
+    
+        const tasks = await queryResult;
+        
+        console.log("from task controller",tasks);
+    
 
-
-        const tasks=await queryResult;
-
-        res.status(200).json(tasks);
-
-    } catch (error) {
+        res.status(200).json({
+          status: true,
+          tasks,
+        });
+      } catch (error) {
         console.log(error);
-        return res.status(400).json({status:false,message:error.message})
-    }
+        return res.status(400).json({ status: false, message: error.message });
+      }
 }
 
 export const getTask=async(req,res)=>{
@@ -293,19 +300,21 @@ export const deleteRestoreTask=async(req,res)=>{
     try {
         const {id}=req.params;
         const{actionType}=req.query;
+        console.log(id,actionType,"restore check");
 
         if(actionType=="delete"){
             console.log("server",id);
             await Task.findByIdAndDelete(id);
-        }else if(actionType="deleteAll"){
+        }else if(actionType=="deleteAll"){
             await Task.deleteMany({isTrashed:true});
         }
-        else if(actionType="restore"){
+        else if(actionType=="restore"){
             const resp=await Task.findById(id);
             resp.isTrashed=false;
             resp.save();
+           
         }
-        else if(actionType="restoreAll"){
+        else if(actionType=="restoreAll"){
             await Task.updateMany({
                 isTrashed:true},{$set:{isTrashed:false,}});
         }

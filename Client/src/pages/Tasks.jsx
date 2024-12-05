@@ -40,7 +40,6 @@ const Tasks = () => {
   });
  
  
-
   return isLoading ? (
     <div className='py-10'>
       <Loading />
@@ -73,10 +72,10 @@ const Tasks = () => {
         )}
 
         {selected !== 1 ? (
-          <BoardView tasks={data} />
+          <BoardView tasks = {data.tasks} />
         ) : (
           <div className='w-full'>
-            <Table tasks={data} />
+            <Table tasks={data.tasks} />
           </div>
         )}
       </Tabs>

@@ -15,6 +15,8 @@ import AddUser from "../components/AddUser";
 import ConfirmatioDialog from "../components/Dialogs";
 import { useDeleteRestoreTaskMutation, useGetAllTaskQuery } from "../redux/slices/api/taskApiSlice";
 import Loading from "../components/Loader";
+import { useEffect } from "react";
+import {toast} from "sonner";
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
   medium: <MdKeyboardArrowUp />,
@@ -28,14 +30,60 @@ const Trash = () => {
   const [type, setType] = useState("delete");
   const [selected, setSelected] = useState("");
 
-  const {data, isLoading} = useGetAllTaskQuery({
-    strQuery: " ",
+  const {data, isLoading,refetch} = useGetAllTaskQuery({
+    strQuery: "",
     isTrashed: "true",
     search: "",
   });
-  console.log(data,"trask ko")
+
+  useEffect(() => {
+    console.log(data,"trask ko")
+  }, [data]);
+  
   const [deleteRestoreTask]=useDeleteRestoreTaskMutation();
 
+  const deleteRestoreHandler =  async ()=>{
+    try{
+      let result;
+      switch(type){
+        case "delete":
+          result = await deleteRestoreTask({
+            id:selected,
+            actionType:"delete",
+          }).unwrap();
+      break;
+      case "deleteAll":
+        result = await deleteRestoreTask({
+          id:selected,
+          actionType:"deleteAll",
+        }).unwrap();
+      break;
+      case "restore":
+        result = await deleteRestoreTask({
+          id:selected,
+          actionType:"restore",
+        }).unwrap();
+      break;
+      case "restoreAll":
+        result = await deleteRestoreTask({
+          id:selected,
+          actionType:"restoreAll",
+        }).unwrap();
+        break;
+      }
+      toast.success(result?.message);
+
+      setTimeout(()=>{
+        setOpenDialog(false);
+        refetch();
+      },50)
+    }
+      catch(err){
+        console.log(err);
+        toast.error(err?.data?.message||err.error);
+      }
+    
+  }
   const deleteAllClick = () => {
     setType("deleteAll");
     setMsg("Do you want to permenantly delete all items?");

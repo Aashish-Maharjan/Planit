@@ -13,7 +13,7 @@ import {
 import { Chart } from "../components/Chart";
 import Loading from "../components/Loader";
 import UserInfo from "../components/UserInfo";
-import { useGetDashboardStatsQuery } from "../redux/slices/api/taskApiSlice";
+import { useDeleteRestoreTaskMutation, useGetDashboardStatsQuery } from "../redux/slices/api/taskApiSlice";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
 
 const TaskTable = ({ tasks }) => {
@@ -148,7 +148,7 @@ const UserTable = ({ users }) => {
 };
 const Dashboard = () => {
   const{data,isLoading}=useGetDashboardStatsQuery();
-console.log(data,"dashboard ko");
+  console.log(data,"dashboard ko");
   if(isLoading)
     return(
       <div className="py-10">
@@ -157,8 +157,8 @@ console.log(data,"dashboard ko");
     )
   
 
-  const totals = data?.tasks;
-
+  const totals = data?.task;
+  
   const stats = [
     {
       _id: "1",
@@ -170,14 +170,14 @@ console.log(data,"dashboard ko");
     {
       _id: "2",
       label: "COMPLTED TASK",
-      total: totals["completed"] || 0,
+      total: totals["completed"]?? 0 ,
       icon: <MdAdminPanelSettings />,
       bg: "bg-[#0f766e]",
     },
     {
       _id: "3",
       label: "TASK IN PROGRESS ",
-      total: totals["in progress"] || 0,
+      total: totals["inprogress"] || 0,
       icon: <LuClipboardEdit />,
       bg: "bg-[#f59e0b]",
     },
